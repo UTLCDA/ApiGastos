@@ -27,11 +27,7 @@ namespace ApiGastos.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-KOIJQ5L;Initial Catalog=bdGastos;Trusted_Connection=True; TrustServerCertificate=True;");
-            }
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -83,7 +79,7 @@ namespace ApiGastos.Models
 
                 entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.IdCategoriaGastoNavigation)
+                entity.HasOne(d => d.objCategoriaGasto)
                     .WithMany(p => p.Gastos)
                     .HasForeignKey(d => d.IdCategoriaGasto)
                     .HasConstraintName("FK_Gastos_CategoriasGasto");
@@ -106,7 +102,7 @@ namespace ApiGastos.Models
 
                 entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.IdCategoriaIngresoNavigation)
+                entity.HasOne(d => d.objCategoriaIngreso)
                     .WithMany(p => p.Ingresos)
                     .HasForeignKey(d => d.IdCategoriaIngreso)
                     .HasConstraintName("FK_Ingresos_CategoriasIngreso");
@@ -125,12 +121,12 @@ namespace ApiGastos.Models
 
                 entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
 
-                entity.HasOne(d => d.IdCategoriaGastoNavigation)
+                entity.HasOne(d => d.objCategoriaGasto)
                     .WithMany(p => p.Pagos)
                     .HasForeignKey(d => d.IdCategoriaGasto)
                     .HasConstraintName("FK_Pagos_CategoriasGasto");
 
-                entity.HasOne(d => d.IdPeriocidadNavigation)
+                entity.HasOne(d => d.objPeriocidad)
                     .WithMany(p => p.Pagos)
                     .HasForeignKey(d => d.IdPeriocidad)
                     .HasConstraintName("FK_Pagos_IdPeriocidad");
@@ -171,7 +167,7 @@ namespace ApiGastos.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.IdRolNavigation)
+                entity.HasOne(d => d.objRoles)
                     .WithMany(p => p.Usuarios)
                     .HasForeignKey(d => d.IdRol)
                     .HasConstraintName("FK_Roles_Roles");

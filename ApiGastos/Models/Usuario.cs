@@ -11,6 +11,6 @@ namespace ApiGastos.Models
         public bool? Activo { get; set; }
         public int? IdRol { get; set; }
 
-        public virtual Role? IdRolNavigation { get; set; }
+        public virtual Role? objRoles { get; set; }
     }
 }

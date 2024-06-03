@@ -13,7 +13,7 @@ namespace ApiGastos.Models
         public DateTime? Fecha { get; set; }
         public int? Pagado { get; set; }
 
-        public virtual CategoriasGasto? IdCategoriaGastoNavigation { get; set; }
-        public virtual Periocidad? IdPeriocidadNavigation { get; set; }
+        public virtual CategoriasGasto? objCategoriaGasto { get; set; }
+        public virtual Periocidad? objPeriocidad { get; set; }
     }
 }

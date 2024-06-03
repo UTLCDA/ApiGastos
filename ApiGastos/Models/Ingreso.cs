@@ -12,6 +12,6 @@ namespace ApiGastos.Models
         public DateTime? Fecha { get; set; }
         public int? IdUsuario { get; set; }
 
-        public virtual CategoriasIngreso? IdCategoriaIngresoNavigation { get; set; }
+        public virtual CategoriasIngreso? objCategoriaIngreso { get; set; }
     }
 }
