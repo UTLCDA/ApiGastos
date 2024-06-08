@@ -148,5 +148,7 @@ namespace ApiGastos.Controllers
 
         //consultar por vista para recolpiar los gastos de la semana y por mes en metodos separados
         //consultar por vista para recolpiar los ingresos de la semana y por mes en metodos separados y en el controllador correspondiente
+
+        // Obtener gasto por dos peri
     }
 }

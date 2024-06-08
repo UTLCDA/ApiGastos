@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ApiGastos.Models
 {
@@ -11,6 +12,7 @@ namespace ApiGastos.Models
         public bool? Activo { get; set; }
         public int? IdRol { get; set; }
 
+        [JsonIgnore]
         public virtual Role? objRoles { get; set; }
     }
 }

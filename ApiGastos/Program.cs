@@ -20,7 +20,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 }
 );
 
-// inicializarCore para peticiones politicas
+// inicializarCore para peticiones politicas esta parte es para aque se puedan consumir los servicios a travez de una ip publica
 var reglasCoreParaConsumir = "ReglasCors";
 builder.Services.AddCors(opcion =>
 {
