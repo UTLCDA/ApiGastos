@@ -183,5 +183,26 @@ namespace ApiGastos.Controllers
         // genenrar consulta por vista cargando desde el dbcontext para mejores practicas
         // despues implementar un worker services para generar un reporte mensual de todos los gastos | ingresos | etc
 
+        [HttpDelete]
+        [Route("Eliminar/{idIngreso:int}")]
+        public IActionResult EliminarGasto(int idIngreso)
+        {
+            Ingreso ingreso = _bdGastosContext.Ingresos.Find(idIngreso);
+            if (idIngreso == null)
+            {
+                return BadRequest($"El ingreso {idIngreso} no fue encontrado ");
+            }
+            try
+            {
+                _bdGastosContext.Ingresos.Remove(ingreso);
+                _bdGastosContext.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message});
+            }
+        }
+
     }
 }

@@ -114,12 +114,16 @@ namespace ApiGastos.Models
                     .HasName("PK__Pagos__FC851A3A48A99C39");
 
                 entity.Property(e => e.Descripcion)
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Fecha).HasColumnType("date");
+                entity.Property(e => e.FechaTentativa).HasColumnType("date");
 
                 entity.Property(e => e.Monto).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.Balance).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.IdMetodoPago).HasColumnName("IdMetodoPago");
 
                 entity.HasOne(d => d.objCategoriaGasto)
                     .WithMany(p => p.Pagos)
