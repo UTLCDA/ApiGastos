@@ -31,7 +31,7 @@ namespace ApiGastos.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message, response = lista });
+                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message});
             }
         }
 
@@ -95,21 +95,77 @@ namespace ApiGastos.Controllers
             try
             {
                 // checar fecha 
-                // si la fecha que esta guardada en base de datos es 2024-05-05 y la fecha que se manda por solicitud es actualizable
-                if (gasto.Fecha != solicitudGasto.Fecha)
-                {
-                    gasto.Fecha = solicitudGasto.Fecha;
-                }
-                // si la fecha no se manda por solicitud pero la fecha que esta en base de datos es distinta a la que se modifico el dia. 
-                // hacer una validacion para que no cambie la fecha si no es requerida para cambiar para que la solicitud solo cambie los valores que se van a cambiar 
-                // en este caso solo agregar una columna de fechaUltimaModificacion
-                // hacer testeo para cambiar id 3 fecha 30-05-2024 Paypal : cambiar solo monto y no debe de cambiar la fecha, verificar que no agregue la fecha del dia actual 02-06-2024
-                else
+                // si la solicitud de la fecha es null se toma la fecha que se actualizo 
+                // si en la solicitud no manda la fecha se asigna la fecha que se registra el cambio
+                if (solicitudGasto.Fecha == null)
                 {
                     gasto.Fecha = fecha;
+                    if (solicitudGasto.Descripcion != null)
+                    {
+                        gasto.Descripcion = solicitudGasto.Descripcion + $" | Registro Actualizado {fecha}";
+                    }
+                    else
+                    {
+                        // se implementa asignacion compuesta porque gasto.Descripcion no es null y se concatena el cambio de la fecha cuando la fecha no se manda por la solicitud
+                        gasto.Descripcion += $" | Registro Actualizado {fecha}";
+                    }
                 }
+                // si la fecha de solicitud es distinta porque se requiere cambiar a la que esta almacenada
+                else if (gasto.Fecha != solicitudGasto.Fecha)
+                {
+                    gasto.Fecha = solicitudGasto.Fecha;
+                    if (solicitudGasto.Descripcion != null)
+                    {
+                        gasto.Descripcion = solicitudGasto.Descripcion + $" | Registro Actualizado {fecha}";
+                    }
+                    else
+                    {
+                        if (gasto.Descripcion.Contains("|"))
+                        {
+                            int index = gasto.Descripcion.IndexOf(" | ");
+                            if (index != -1)
+                            {
+                                // Reemplazar todo lo que está a la derecha del símbolo
+                                gasto.Descripcion = gasto.Descripcion.Substring(0, index + 3) + $" Registro Actualizado {fecha}"; ;
+                            }
+                        }
+                        else
+                        {
+                            gasto.Descripcion += $" | Registro Actualizado {fecha}";
+                        }
+                        
+                    }
+                }
+                // si no se quiere modificar la fecha 2024-06-01 (solicitud fecha = 2024-06-01 )se queda igual, se agrega la fecha de modificacion a descripcion
+                else
+                {
+                    gasto.Fecha = gasto.Fecha;
+                    if (solicitudGasto.Descripcion == null)
+                    {
+                        if (gasto.Descripcion != null)
+                        {
+                            if (gasto.Descripcion.Contains("|"))
+                            {
+                                int index = gasto.Descripcion.IndexOf(" | ");
+                                if (index != -1)
+                                {
+                                    // Reemplazar todo lo que está a la derecha del símbolo
+                                    gasto.Descripcion = gasto.Descripcion.Substring(0, index + 3) + $" Registro Actualizado {fecha}"; ;
+                                }
+                            }
+                            else
+                            {
+                                gasto.Descripcion += $" | Registro Actualizado {fecha}";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        gasto.Descripcion = solicitudGasto.Descripcion + $" | Registro Actualizado {fecha}";
+                    }
+                }
+
                 gasto.IdCategoriaGasto = solicitudGasto.IdCategoriaGasto is null ? gasto.IdCategoriaGasto : solicitudGasto.IdCategoriaGasto;
-                gasto.Descripcion = solicitudGasto.Descripcion is null ? gasto.Descripcion : solicitudGasto.Descripcion;
                 gasto.Monto = solicitudGasto.Monto is null ? gasto.Monto : solicitudGasto.Monto;
                 // configuracion por parametro de login en 2 etapa front end
                 gasto.IdUsuario = 1;
@@ -142,12 +198,12 @@ namespace ApiGastos.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message, response = gasto });
+                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message });
             }
         }
 
         //consultar por vista para recolpiar los gastos de la semana y por mes en metodos separados
-        //consultar por vista para recolpiar los ingresos de la semana y por mes en metodos separados y en el controllador correspondiente
+        //consultar por vista para recolpiar los gastos de la semana y por mes en metodos separados y en el controllador correspondiente
 
         // Obtener gasto por dos peri
     }

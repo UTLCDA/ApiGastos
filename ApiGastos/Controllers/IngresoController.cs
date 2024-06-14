@@ -25,7 +25,7 @@ namespace ApiGastos.Controllers
         #region Lista de Ingresos
         [HttpGet]
         [Route("Lista/Ingresos")]
-        public IActionResult Lista()
+        public IActionResult ListaIngresos()
         {
             List<Ingreso> lista = new List<Ingreso>();
             try
@@ -36,7 +36,7 @@ namespace ApiGastos.Controllers
             catch (Exception ex)
             {
                 // COMO AUTOMATIZAR UN PROCESO A TRAVEZ DE UN XML
-                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message, response = lista });
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = ex.Message });
             }
         }
 
