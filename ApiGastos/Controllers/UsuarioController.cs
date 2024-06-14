@@ -124,6 +124,7 @@ namespace ApiGastos.Controllers
         [Route("Baja/")]
         public IActionResult DarDeBajaUsuario([FromBody] Usuario solicitudUsuario)
         {
+            // hacer una condicion para que mediante una solicitud solo pida el id usuario y activo
             Usuario usuario = _bdGastosContext.Usuarios.Find(solicitudUsuario.IdUsuario);
             if (usuario == null)
             {
