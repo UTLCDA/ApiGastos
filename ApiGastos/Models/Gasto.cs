@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ApiGastos.Models
 {
@@ -11,7 +12,7 @@ namespace ApiGastos.Models
         public decimal? Monto { get; set; }
         public DateTime? Fecha { get; set; }
         public int? IdUsuario { get; set; }
-
+        [JsonIgnore]
         public virtual CategoriasGasto? objCategoriaGasto { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ApiGastos.Models
 {
@@ -12,7 +13,7 @@ namespace ApiGastos.Models
 
         public int IdRol { get; set; }
         public string? Descripcion { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }
