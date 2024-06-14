@@ -161,7 +161,7 @@ namespace ApiGastos.Controllers
                 // verificar condicion , al hacer el update si la solicitud viene llena al registro existente 
                 if (solicitudPago.Monto != null)
                 {
-                    if (solicitudPago.Monto >= pago.Balance)
+                    if (solicitudPago.Monto > pago.Balance)
                     {
                         return StatusCode(StatusCodes.Status200OK, new { mensaje = "El importe de tu balance es menor a lo que vas a pagar de tu pago." });
                     }
@@ -172,6 +172,7 @@ namespace ApiGastos.Controllers
                 pago.Monto = solicitudPago.Monto is null ? pago.Monto : solicitudPago.Monto;
                 pago.IdMetodoPago = solicitudPago.IdMetodoPago is null ? pago.IdMetodoPago : solicitudPago.IdMetodoPago;
                 pago.FechaTentativa = solicitudPago.FechaTentativa is null ? pago.FechaTentativa : solicitudPago.FechaTentativa;
+                pago.Balance = solicitudPago.Balance is null ? pago.Balance : solicitudPago.Balance;
 
                 _bdGastosContext.Update(pago);
                 _bdGastosContext.SaveChanges();

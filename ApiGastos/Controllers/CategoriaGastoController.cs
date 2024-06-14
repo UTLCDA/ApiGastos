@@ -46,14 +46,14 @@ namespace ApiGastos.Controllers
             categoriasGasto = _bdGastosContext.CategoriasGastos.Find(IdCategoriasGasto);
             if (categoriasGasto == null)
             {
-                return BadRequest("Gasto no encontrado");
+                return BadRequest("Categoria de gasto no encontrado");
             }
             try
             {
                 categoriasGasto = _bdGastosContext.CategoriasGastos.Where(g => g.IdCategoriasGasto == IdCategoriasGasto).FirstOrDefault();
                 if (categoriasGasto == null)
                 {
-                    return BadRequest("Gasto no encontrado de acuerdo a los parametros de busqueda");
+                    return BadRequest("Categoria de gasto no encontrado de acuerdo a los parametros de busqueda");
                 }
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = categoriasGasto });
             }
@@ -63,43 +63,39 @@ namespace ApiGastos.Controllers
             }
         }
 
-        /*
-         * 
-         * 
-                 [HttpPut]
-        [Route("Editar/")]
-        public IActionResult EditarGasto([FromBody] Gasto solicitudGasto)
+        [HttpPost]
+        [Route("GuardarCategoriaGasto")]
+        public IActionResult GuardarCategoriaGasto([FromBody] CategoriasGasto solicitudCategoriasGasto)
+        {
+            try
+            {
+                _bdGastosContext.CategoriasGastos.Add(solicitudCategoriasGasto);
+                _bdGastosContext.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = solicitudCategoriasGasto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("EditarCategoriaGasto/")]
+        public IActionResult EditarCategoriaGasto([FromBody] CategoriasGasto solicitudCategoriasGasto)
         {
             DateTime fecha = DateTime.Now;
-            
-            Gasto gasto = _bdGastosContext.Gastos.Find(solicitudGasto.IdGasto);
-            if (gasto == null)
+
+            CategoriasGasto categoriasGasto = _bdGastosContext.CategoriasGastos.Find(solicitudCategoriasGasto.IdCategoriasGasto);
+            if (categoriasGasto == null)
             {
-                return BadRequest($"El gasto {solicitudGasto.IdGasto} no encontrado ");
+                return BadRequest($"EL id de la  categoria del gasto {solicitudCategoriasGasto.IdCategoriasGasto} no fue encontrado ");
             }
             try
             {
-                // checar fecha 
-                // si la fecha que esta guardada en base de datos es 2024-05-05 y la fecha que se manda por solicitud es actualizable
-                if (gasto.Fecha != solicitudGasto.Fecha)
-                {
-                    gasto.Fecha = solicitudGasto.Fecha;
-                }
-                // si la fecha no se manda por solicitud pero la fecha que esta en base de datos es distinta a la que se modifico el dia. 
-                // hacer una validacion para que no cambie la fecha si no es requerida para cambiar para que la solicitud solo cambie los valores que se van a cambiar 
-                // en este caso solo agregar una columna de fechaUltimaModificacion
-                // hacer testeo para cambiar id 3 fecha 30-05-2024 Paypal : cambiar solo monto y no debe de cambiar la fecha, verificar que no agregue la fecha del dia actual 02-06-2024
-                else
-                {
-                    gasto.Fecha = fecha;
-                }
-                gasto.IdCategoriaGasto = solicitudGasto.IdCategoriaGasto is null ? gasto.IdCategoriaGasto : solicitudGasto.IdCategoriaGasto;
-                gasto.Descripcion = solicitudGasto.Descripcion is null ? gasto.Descripcion : solicitudGasto.Descripcion;
-                gasto.Monto = solicitudGasto.Monto is null ? gasto.Monto : solicitudGasto.Monto;
-                // configuracion por parametro de login en 2 etapa front end
-                gasto.IdUsuario = 1;
+                categoriasGasto.Nombre = solicitudCategoriasGasto.Nombre is null ? categoriasGasto.Nombre : solicitudCategoriasGasto.Nombre;
+                categoriasGasto.Descripcion = solicitudCategoriasGasto.Descripcion is null ? categoriasGasto.Descripcion : solicitudCategoriasGasto.Descripcion;
 
-                _bdGastosContext.Update(gasto);
+                _bdGastosContext.Update(categoriasGasto);
                 _bdGastosContext.SaveChanges();
 
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok" });
@@ -111,26 +107,31 @@ namespace ApiGastos.Controllers
         }
 
         [HttpDelete]
-        [Route("Eliminar/{idGasto:int}")]
-        public IActionResult EliminarGasto(int idGasto)
+        [Route("Eliminar/{IdCategoriasGasto:int}")]
+        public IActionResult EliminarCategoriaGasto(int idCategoriasGasto)
         {
-            Gasto gasto = _bdGastosContext.Gastos.Find(idGasto);
-            if (idGasto == null)
+            CategoriasGasto categoriasGasto = _bdGastosContext.CategoriasGastos.Find(idCategoriasGasto);
+            if (idCategoriasGasto == null)
             {
-                return BadRequest($"El gasto {idGasto} no fue encontrado ");
+                return BadRequest($"El gasto {idCategoriasGasto} no fue encontrado ");
             }
             try
             {
-                _bdGastosContext.Gastos.Remove(gasto);
+                if (categoriasGasto == null)
+                {
+                    return StatusCode(StatusCodes.Status200OK, new { mensaje = "No se encontro ningun gasto." });
+
+                }
+                _bdGastosContext.CategoriasGastos.Remove(categoriasGasto);
                 _bdGastosContext.SaveChanges();
                 return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok" });
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message, response = gasto });
+                return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message});
             }
         }
-         * 
-         */
+        
+         
     }
 }

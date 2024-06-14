@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ApiGastos.Models
 {
@@ -13,7 +14,7 @@ namespace ApiGastos.Models
         public int IdCategoriasIngreso { get; set; }
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Ingreso> Ingresos { get; set; }
     }
 }
