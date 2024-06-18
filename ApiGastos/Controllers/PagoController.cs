@@ -73,6 +73,7 @@ namespace ApiGastos.Controllers
         {
             DateTime fecha = DateTime.Now;
             try
+
             // checar para omitir el objeto objCategoriaingreso lo pide en el cuerpo json.
             // agregar una condicion para que el JsonIgnore no lo pida en el cuerpo json
             // se agrega la fecha para que la solicitud tome la fecha actual del sistema.

@@ -75,6 +75,11 @@ namespace ApiGastos.Controllers
         [Route("Guardar/")]
         public IActionResult GuargarIngreso([FromBody] Ingreso ingreso)
         {
+            var condicionCatIngreso = _bdGastosContext.CategoriasIngresos.FirstOrDefault(p => p.IdCategoriasIngreso == ingreso.IdIngreso);
+            if (condicionCatIngreso == null)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = $"El id {ingreso.IdCategoriaIngreso} no existe en el catalogo de Categoria de ingresos." });
+            }
             DateTime fecha = DateTime.Now;
             try
             // checar para omitir el objeto objCategoriaingreso lo pide en el cuerpo json.

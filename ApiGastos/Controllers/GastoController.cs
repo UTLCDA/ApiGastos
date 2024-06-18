@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace ApiGastos.Controllers
 {
@@ -64,6 +65,22 @@ namespace ApiGastos.Controllers
         [Route("Guardar/")]
         public IActionResult GuargarGasto([FromBody] Gasto gasto)
         {
+
+            var condicionCatGastos = _bdGastosContext.CategoriasGastos.FirstOrDefault(p => p.IdCategoriasGasto == gasto.IdCategoriaGasto);
+            if (condicionCatGastos == null)
+            {
+                return StatusCode(StatusCodes.Status200OK, new { mensaje = $"El id {gasto.IdCategoriaGasto} no existe en el catalogo de Categoria de gastos."});
+
+                // Etapa 3 agregar estatus de respuesta Enum 
+                /*
+                return new RespuestaDto
+                {
+                    EstatusProceso = EstatusProceso.Invalido,
+                    MensajeProceso = $"No existe registro del anticipo Maestro | Cliente : {solicitud.IdCliente} | Folio : {solicitud.Folio} | Sucursal : {solicitud.Udn} | Empresa : {solicitud.IdEmpresa} ."
+                };
+                */
+            }
+
             DateTime fecha = DateTime.Now;
             try
             // checar para omitir el objeto objCategoriaGasto lo pide en el cuerpo json.
@@ -204,7 +221,42 @@ namespace ApiGastos.Controllers
 
         //consultar por vista para recolpiar los gastos de la semana y por mes en metodos separados
         //consultar por vista para recolpiar los gastos de la semana y por mes en metodos separados y en el controllador correspondiente
+        //[HttpPut]
+        //[Route("Editar/")]
+        //public IActionResult ConsultarGastoPorCategoria([FromBody] Gasto solicitudGasto)
+        //{
+        //    DateTime fechaInicio = DateTime.Now;
+        //    DateTime fechaFin = DateTime.Now;
 
+        //    // agregar funcion de periocidad
+        //    solicitudGasto.Fecha = fechaInicio;
+
+        //    List<Gasto> gastoLista = new List<Gasto>();
+        //    var transaccionesEnRango = gastoLista
+        //    .Where(t => t.Fecha >= fechaInicio && t.Fecha <= fechaFin)
+        //    .ToList();
+
+        //    // Imprimir las transacciones encontradas
+        //    foreach (var transaccion in transaccionesEnRango)
+        //    {
+        //        Console.WriteLine(transaccion);
+        //    }
+        //    if (gastoLista == null)
+        //    {
+        //        return BadRequest($"El gasto {solicitudGasto.IdGasto} no encontrado ");
+        //    }
+        //    try
+        //    {
+        //        gastoLista = _bdGastosContext.Gastos.ToList();
+        //        return StatusCode(StatusCodes.Status200OK, new { mensaje = "ok", response = gastoLista });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status400BadRequest, new { mensaje = ex.Message });
+        //    }
+        //}
+        // metodo para consultar los gatos del mes o por semana o por categoria 
+        //Hacer el update para los gastos tengan su categoria exacta
         // Obtener gasto por dos peri
     }
 }
